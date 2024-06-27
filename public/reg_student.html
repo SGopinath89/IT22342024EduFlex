@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduflex - StudentRegistration</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a class="get-started" href="getstart.html">Get Started</a></li>
+            </ul>
+
+            <div class="logo-container">
+                <img class = "logo" src = "logo.png">
+            </div>
+        </nav>
+     
+        <section >
+            <div class="form-box">
+                <h2>Register as Student</h2>
+            <form action="/regstudents" method="post" id="register" class="input-group">
+                <input type="text" class="input-field" placeholder="Full Name" name="name" required="required"><br>
+                <input type="text" class="input-field" placeholder="User Name" name="uname" required="required"><br>
+                <input type="email" class="input-field" placeholder="Email Address" name="email" required="required"><br>
+                <input type="password" class="input-field" placeholder="Create Password" name="password" required="required"><br>
+                <input type="password" class="input-field" placeholder="Confirm Password" name="cpassword" required="required"><br>
+                <input type="number" class="input-field" placeholder="Age" name="age" required="required"><br>
+                <input type="text" class="input-field" placeholder="College" name="college" required="required"><br>
+                <input type="hidden" name="role" value="student">
+                <h5><input type="checkbox" class="check-box" id="chkAgree" onclick="goFurther()">I agree to the Terms & Conditions</h5>
+                <button type="submit" id="btnSubmit" class="submit-btn">Register</button>
+            </form>
+            </div>   
+        </section>
+    </header>
+    
+    <footer>
+        <p>&copy; 2024 Eduflex. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
