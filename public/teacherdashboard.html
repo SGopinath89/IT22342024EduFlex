@@ -88,6 +88,7 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a class="get-started" href="login.html">Get Started</a></li>
+                <li><a class="get-started" href="logout.html">LogOut</a></li>
             </ul>
 
             <div class="logo-container">
@@ -115,7 +116,7 @@
                 <button class="acbtn" type="submit"><a href="createlivesession.html">Add Session</a></button>
             </div>
 
-        <div class="student-details">
+        <div class="teacher-details">
                 <p><strong>Name:</strong> <span id="teacher-name"></span></p>
               <!--   <p><strong>ID:</strong> <span id="teacher-id"></span></p> -->
                 <p><strong>Email:</strong> <span id="teacher-email"></p>
@@ -163,7 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 viewDetailsButton.textContent = 'View Details';
                 viewDetailsButton.addEventListener('click', () => viewCourse(course._id));
                 courseCard.appendChild(viewDetailsButton); 
-                
+
+                const lineBreak = document.createElement('br');
 
                 // Edit button
                 const editButton = document.createElement('button');
@@ -181,6 +183,16 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('No user details found in local storage.');
     }
+
+    // Logout button functionality
+    document.getElementById('logout-button').addEventListener('click', () => {
+        // Clear user data from localStorage
+        localStorage.removeItem('user');
+
+        // Redirect to logout page
+        window.location.href = 'logout.html';
+    });
+
 });
 
 

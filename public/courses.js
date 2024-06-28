@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 viewDetailsButton.addEventListener('click', () => viewCourseDetails(course._id));
                 courseCard.appendChild(viewDetailsButton);
 
-                // Edit button
-                /* const editButton = document.createElement('button');
-                editButton.textContent = 'Edit';
-                editButton.addEventListener('click', () => editCourse(course._id));
-                courseCard.appendChild(editButton); */
+                // Enroll button
+               /*  const enrollButton = document.createElement('button');
+                enrollButton.textContent = 'Enroll';
+                enrollButton.addEventListener('click', () => enrollCourse(course._id));
+                courseCard.appendChild(enrollButton);  */
 
                 // Delete button
                 /* const deleteButton = document.createElement('button');
@@ -54,5 +54,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 async function viewCourseDetails(courseId) {
     // Redirect to the course details page, passing the courseId as a query parameter
-    window.location.href = `/course_details.html?id=${courseId}`;
+    window.location.href = `/viewcourse.html?id=${courseId}`;
 }
+
+/* async function viewCourse(courseId) {
+    // Redirect to the course details page, passing the courseId as a query parameter
+    window.location.href = `/enrollcoursedetails.html?id=${courseId}`;
+} */

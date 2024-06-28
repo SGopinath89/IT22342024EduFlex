@@ -4,11 +4,11 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const Student = require('./models/regstudent.model');
-const Teacher = require('./models/regteacher.model');
+const student = require('./models/regstudent.model');
 const Course = require('./models/course.model');
 const Lesson = require('./models/lesson.model');
 
-/*const regteacherRoute = require('./routes/regteacherRoute');*/
+/*const regstudentRoute = require('./routes/regstudentRoute');*/
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static(intialPath));
 
-/*app.use('/regteachers',regteacherRoute);*/
+/*app.use('/regstudents',regstudentRoute);*/
 
 
 app.listen(3000, (req,res) =>{
@@ -78,12 +78,12 @@ app.post('/regstudents', async (req, res) => {
 });
 
 
-/* *******REGISTER TEACHERS******* */
-app.get('/regteachers',(req,res) => {
-    res.sendFile(path.join(intialPath,"reg_teacher.html"));
+/* *******REGISTER studentS******* */
+app.get('/regstudents',(req,res) => {
+    res.sendFile(path.join(intialPath,"reg_student.html"));
 })
 
-app.post('/regteachers', async (req, res) => {
+app.post('/regstudents', async (req, res) => {
     const { name, uname, password, cpassword, email, age, qualification } = req.body;
 
     if (!validateUsername(uname)) {
@@ -103,15 +103,15 @@ app.post('/regteachers', async (req, res) => {
     }
 
     try {
-        const existingUser = await Teacher.findOne({ uname });
+        const existingUser = await student.findOne({ uname });
         if (existingUser) {
             return res.status(400).json({ success: false, message: 'Username already exists.' });
         }
 
         /*  const hashedPassword = await bcrypt.hash(password, 10);  */
-        const teacher = new Teacher({ name, uname, password/*  : hashedPassword */ , email, age, qualification });
-        await teacher.save();
-        res.status(200).json({ success: true, teacher });
+        const student = new student({ name, uname, password/*  : hashedPassword */ , email, age, qualification });
+        await student.save();
+        res.status(200).json({ success: true, student });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
@@ -132,11 +132,11 @@ app.post('/login', async (req, res) => {
         }
         // Check in students collection
         let user = await Student.findOne({ uname });
-        let userType = 'student'; // to differentiate between student and teacher
+        let userType = 'student'; // to differentiate between student and student
         if (!user) {
-            // If user is not found in students collection, check in teachers collection
-            user = await Teacher.findOne({ uname });
-            userType = 'teacher';
+            // If user is not found in students collection, check in students collection
+            user = await student.findOne({ uname });
+            userType = 'student';
         }
 
         if (!user) {
@@ -157,7 +157,7 @@ app.post('/login', async (req, res) => {
                 uname: user.uname,
                 name: user.name,
                 email: user.email,
-                qualification: userType === 'teacher' ? user.qualification : undefined
+                qualification: userType === 'student' ? user.qualification : undefined
             };
             console.log(userDetails);
             
@@ -166,7 +166,7 @@ app.post('/login', async (req, res) => {
                 console.log('Redirect URL:', '/studentdashboard.html');
                 return res.status(200).json({ success: true, user: userDetails, redirectPage: '/studentdashboard.html' });
             } else {
-                return res.status(200).json({ success: true, user: userDetails, redirectPage: '/teacherdashboard.html' });
+                return res.status(200).json({ success: true, user: userDetails, redirectPage: '/studentdashboard.html' });
             }
         } else {
             console.warn('Invalid password attempt for user:', uname);
@@ -211,29 +211,29 @@ app.post('/addcourse', async (req, res) => {
     }
 
     try {
-        // Log before finding teacher
-          console.log('Finding teacher with email:', email);
+        // Log before finding student
+          console.log('Finding student with email:', email);
 
 
-        // Find teacher by email
-        const teacher = await Teacher.findOne({ email });
+        // Find student by email
+        const student = await student.findOne({ email });
 
-        if (!teacher) {
-            console.log('Teacher not found for email:', email);
+        if (!student) {
+            console.log('student not found for email:', email);
             return res.status(404).json({
                 success: false,
-                message: 'Teacher not found'
+                message: 'student not found'
             });
         }
 
           // Log before creating course
-          console.log('Creating course for teacher:', teacher._id);
+          console.log('Creating course for student:', student._id);
 
-        // Use teacher's ID
+        // Use student's ID
         const course = new Course({
             title,
             description,
-            teacherId: teacher._id
+            studentId: student._id
         });
 
         await course.save();
@@ -285,13 +285,13 @@ app.get('/courses/:id', async (req, res) => {
     }
 });
 
-app.get('/teachers/:id', async (req, res) => {
+app.get('/students/:id', async (req, res) => {
     try {
-        const teacher = await Teacher.findById(req.params.id);
-        if (!teacher) {
-            return res.status(404).json({ success: false, message: 'Teacher not found.' });
+        const student = await student.findById(req.params.id);
+        if (!student) {
+            return res.status(404).json({ success: false, message: 'student not found.' });
         }
-        res.json({ success: true, teacher });
+        res.json({ success: true, student });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
@@ -360,7 +360,7 @@ app.get('/courses/:id', async (req, res) => {
     }
 
     try {
-        const course = await Course.findById(id).populate('teacherId', 'name');
+        const course = await Course.findById(id).populate('studentId', 'name');
         if (!course) {
             return res.status(404).json({ success: false, message: 'Course not found.' });
         }
@@ -370,24 +370,38 @@ app.get('/courses/:id', async (req, res) => {
     }
 });
 
-// Get courses for a specific teacher by email
-app.get('/teacher/courses/:email', async (req, res) => {
+// Get courses for a specific student by email
+app.get('/student/courses/:email', async (req, res) => {
     const { email } = req.params;
 
     try {
-        // Find teacher by email
-        const teacher = await Teacher.findOne({ email });
+        // Find student by email
+        const student = await student.findOne({ email });
 
-        if (!teacher) {
-            return res.status(404).json({ success: false, message: 'Teacher not found.' });
+        if (!student) {
+            return res.status(404).json({ success: false, message: 'student not found.' });
         }
 
-        // Find courses associated with this teacher's ID
-        const courses = await Course.find({ teacherId: teacher._id });
+        // Find courses associated with this student's ID
+        const courses = await Course.find({ studentId: student._id });
 
         res.status(200).json({ success: true, courses });
     } catch (error) {
-        console.error('Error fetching courses for teacher:', error);
+        console.error('Error fetching courses for student:', error);
         res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
+    }
+});
+
+
+//get student by ID
+app.get('/students/:id', async (req, res) => {
+    try {
+        const student = await Student.findById(req.params.id);
+        if (!student) {
+            return res.status(404).json({ success: false, message: 'Student not found.' });
+        }
+        res.json({ success: true, student });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
     }
 });

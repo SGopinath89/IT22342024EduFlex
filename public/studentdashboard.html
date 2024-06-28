@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduflex - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a class="get-started" href="login.html">Get Started</a></li>
+                <li><a class="get-started" href="logout.html">LogOut</a></li>
+            </ul>
+
+            <div class="logo-container">
+                <img class = "logo" src = "logo.png">
+            </div>
+
+            
+			
+
+        </nav>
+
+
+</header>
+
+<div class="container">
+    <!-- <aside class="sidebar"> -->
+        <div class="student-info">
+            <h2 class="welcome">Welcome Student <span id="student-username"></span> <!-- <script>document.write(localStorage.getItem("uname"))</script> --></h2>
+           <!--  <p> <img src="profile.jpg" alt="Student Profile Picture" class="profile-pic"></p> -->
+           <div class="student-details">
+                <p><strong>Name:</strong><span id="student-name"></p>
+                <!-- <p><strong>ID:</strong> <span id="student-id"></span></p> -->
+                <p><strong>Email:</strong> <span id="student-email"></p>
+            </div>
+        </div>
+    <!-- </aside> -->
+    <!-- <main class="content">
+        <section class="courses">
+            <h2>Current Courses</h2>
+            <ul>
+                <li>Introduction to Computer Science</li>
+                <li>Principles of Web Design</li>
+                <li>Algorithms and Data Structures</li>
+                <li>Software Engineering</li>
+            </ul>
+        </section>
+    </main> -->
+   
+</div>
+
+<div class="your-courses">
+    <h2>Your Courses</h2>
+    <div id="student-courses"></div>
+</div>
+
+
+<div class="chk-progress">
+    <h2>Your Progress</h2>
+    <a href="stdprogress.html" class="submit-btnlive" align="center">Check your progress</a> <br><br>
+</div>
+
+
+<!-- <section >
+    <div class="auth-buttons" align="center">
+        <a href="joinsession.html" class="submit-btnlive" align="center">Join Live Session</a><br><br>
+        
+    </div>
+     
+</section> -->
+
+<footer>
+    <p>&copy; 2024 Eduflex. All rights reserved.</p>
+</footer>
+
+<script src="studentdashboard.js"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+        console.log(localStorage.getItem('userDetails'));
+        if (userDetails) {
+            document.getElementById('student-username').textContent = userDetails.uname;
+            document.getElementById('student-name').textContent = userDetails.name;
+            /* document.getElementById('teacher-id').textContent = userDetails._id; */
+            document.getElementById('student-email').textContent = userDetails.email;
+           
+
+        } else {
+        console.error('No user details found in local storage.');
+    }
+
+    // Logout button functionality
+    document.getElementById('logout-button').addEventListener('click', () => {
+        // Clear user data from localStorage
+        localStorage.removeItem('user');
+
+        // Redirect to logout page
+        window.location.href = 'logout.html';
+    });
+
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!-- logout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional styling for logout page if not already in styles.css */
+        body{
+            background-image: url('home_back.jpg');
+        }
+        .logout-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .logout-message {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        .logout-btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #007BFF; /* Primary color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background-color: #0056b3; /* Darker shade for hover effect */
+        }
+    </style>
+</head>
+<body>
+    <div class="logout-container">
+        <div class="logout-message">You have been logged out.</div>
+        <button id="login-button" class="logout-btn">Go to Login</button>
+    </div>
+    <script>
+        document.getElementById('login-button').addEventListener('click', () => {
+            // Redirect to login page
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
