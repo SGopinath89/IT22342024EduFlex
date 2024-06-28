@@ -6,6 +6,46 @@
     <title>Eduflex - Login</title>
     <link rel="stylesheet" href="styles.css">
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('login');
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                
+                try {
+                    const response = await fetch('/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                         console.log('Login successful, redirecting to:', result.redirectPage); // Debug log
+
+                          // Assuming result.user contains user details.
+                        localStorage.setItem('userDetails', JSON.stringify(result.user));
+                        //localStorage.setItem('userType', result.userType); // Assuming result.userType contains user type.
+                        window.location.href = result.redirectPage;
+                    } else {
+                        console.error('Login failed:', result.message); // Debug log
+                        document.getElementById('error-message').textContent = result.message;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('error-message').textContent = 'An unexpected error occurred.';
+                }
+            });
+        });
+    </script>
+
+
 </head>
 <body>
     <div class="log-header">

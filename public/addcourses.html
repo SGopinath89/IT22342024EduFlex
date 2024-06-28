@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduflex - AddCourse</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body, html {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f2;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            margin: 10px 0 5px;
+            display: block;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Includes padding and border in element's width/height */
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: linear-gradient(to right, #89a524, #279cdf);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 40%;
+            margin-left: 30%;
+        }
+
+        button:hover {
+            background-color: #020807;
+        }
+
+        table{
+            width: 80%;
+            margin: 20px auto;
+            background-color: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            
+        }
+
+        
+    </style>
+
+</head>
+   <body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <!-- <li><a class="get-started" href="login.html">Get Started</a></li> -->
+            </ul>
+
+            <div class="logo-container">
+                <img class = "logo" src = "logo.png">
+            </div>
+        </nav>
+
+
+</header>
+
+<div class="container">
+    <h2>Add New Course</h2>
+    <form action="/addcourse" method="POST" id="add-course-form">
+        <label for="course-title">Course Title:</label>
+        <input type="text" id="course-title" name="course-title" required>
+
+        <label for="course-description">Course Description:</label>
+        <textarea id="course-description" name="course-description" rows="4" required></textarea>
+
+        <label for="email">Teacher Email:</label>
+        <input type="text" name="email" placeholder="Teacher's Email" required>
+
+   <!-- <input type="hidden" id="teacher-id" name="teacher-id" value=""> --><!-- Add dynamic teacher ID here--> 
+
+        <button type="submit">Add Course</button>
+    </form>
+
+</div>
+
+
+
+<section class="container">
+    <h2>Manage Lessons</h2>
+    <form action="/courses/:id/lessons" method="POST" id="add-lesson-form">
+        <label for="select-course">Select Course:</label>
+        <select id="select-course"  name="select-course" required>
+           <!--  <option value="" disabled selected>Select a course</option>  -->
+            <!-- Options will be populated dynamically -->
+        </select>
+
+        <label for="lesson-title">Lesson Title:</label>
+        <input type="text" id="lesson-title" name="lesson-title" required>
+
+        <label for="lesson-notes">Lesson Notes (URL):</label>
+        <input type="url" id="lesson-notes" name="lesson-notes" required>
+
+        <label for="lesson-video">Lesson Video (URL):</label>
+        <input type="url" id="lesson-video" name="lesson-video" required>
+
+        <label for="lesson-quiz">Lesson Quiz (URL):</label>
+        <input type="url" id="lesson-quiz" name="lesson-quiz" required>
+
+        <button type="submit">Add Lesson</button>
+    </form>
+</section>
+
+
+
+<section class="container">
+    <h2>Course List</h2>
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Actions</th>
+                </tr>
+               <!-- use to delete or update  -->
+            </thead>
+            <tbody id="course-container">
+                <!-- Course list will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+<footer>
+    <p>&copy; 2024 Eduflex. All rights reserved.</p>
+</footer>
+
+<script src="addcourse.js"></script>
+
+<!-- Include the JavaScript for user status check -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+        const nav = document.querySelector('nav ul');
+
+        if (userDetails) {
+            // Remove any existing dashboard links
+            document.querySelectorAll('.dashboard-link').forEach(link => link.remove());
+
+            // Create dashboard link based on user type
+            const dashboardLink = document.createElement('li');
+            dashboardLink.className = 'dashboard-link';
+            const dashboardAnchor = document.createElement('a');
+            dashboardAnchor.href = userDetails.qualification ? 'teacherdashboard.html' : 'studentdashboard.html';
+            dashboardAnchor.textContent = 'Dashboard';
+            dashboardLink.appendChild(dashboardAnchor);
+            nav.appendChild(dashboardLink);
+
+            // Create logout link
+            const logoutLink = document.createElement('li');
+            logoutLink.className = 'dashboard-link';
+            const logoutAnchor = document.createElement('a');
+            logoutAnchor.href = '#';
+            logoutAnchor.textContent = 'Logout';
+            logoutAnchor.addEventListener('click', () => {
+                localStorage.removeItem('userDetails');
+                window.location.href = 'home.html';
+            });
+            logoutLink.appendChild(logoutAnchor);
+            nav.appendChild(logoutLink);
+        }
+    });
+</script>
+
+</body>
+</html>

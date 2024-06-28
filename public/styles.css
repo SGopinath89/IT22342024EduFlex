@@ -149,9 +149,28 @@
     padding-top: 150px;
     padding-bottom: 36vh;
     /*align-items: center;*/
+    margin-left:35%;
   }
   
   .auth-buttons a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff9900;
+    color: #f2eff8;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+  .auth-buttons_1 {
+    margin-top: 20px;
+    /*padding-right: 20%;*/
+    padding-top: 150px;
+    padding-bottom: 36vh;
+    /*align-items: center;*/
+    margin-left:45%;
+  }
+  
+  .auth-buttons_1 a {
     display: inline-block;
     padding: 10px 20px;
     background-color: #ff9900;
@@ -222,4 +241,103 @@
   padding: 10px;
   border: 1px solid #76bd8b;
   border-radius: 5px;
+}
+
+ /*login page */
+         
+ .log-header {
+  /* background-color: #333;*/
+  background-image: url('home_back.jpg');
+  padding: 5px 0;
+  padding-top: 20px;
+  height: 100vh;
+}
+
+/******teacher dashboard******/
+
+.acbtn{
+  background: transparent;
+  width: 50%;
+  
+}
+.add-course{
+  padding: 5px;
+  margin-left: 350px; 
+  right: 100px;
+  text-align: center;
+  border: 2px solid #d6f138;
+  border-radius: 20px;
+  text-decoration: none;
+  /*transition: .5s;*/
+  background: linear-gradient(to right, #89a524, #279cdf);
+  color: #fff;
+  width: 20%;
+  flex-direction: column;
+  position: absolute;
+  
+}
+
+.addlivesession{
+  padding: 5px;
+  margin-left: 350px; 
+  right: 100px;
+  text-align: center;
+  border: 2px solid #d6f138;
+  border-radius: 20px;
+  text-decoration: none;
+  /*transition: .5s;*/
+  background: linear-gradient(to right, #89a524, #279cdf);
+  color: #fff;
+  width: 20%;
+  flex-direction: column;
+  position: absolute;
+  margin-top: 60px;
+}
+
+/* Student Dashboard */
+
+.student-details{
+  padding: 3%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: -25%;
+  margin-right: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 0px 100px rgba(0,0,0,0.1);
+  width: 300px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.welcome{
+  padding: 1%;   
+  padding-left: 10%;
+  font: 2em josefin sans;
+  font-weight: 1000;
+}
+
+.chk-progress{
+  padding: 5px 20px;
+  border: 2px solid #d6f138;
+  border-radius: 20px;
+  text-decoration: none;
+  /*transition: .5s;*/
+  background: linear-gradient(to right, #89a524, #279cdf);
+  text-align: center;
+  width: 25%;
+  color: #fff;
+}
+
+.your-courses{
+padding: 5px 20px;
+border: 2px solid #d6f138;
+border-radius: 20px;
+text-decoration: none;
+/*transition: .5s;*/
+background: linear-gradient(to right, #89a524, #279cdf);
+color: #fff;
+text-align: center;
+width: 25%;
 }

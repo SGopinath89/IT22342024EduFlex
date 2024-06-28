@@ -45,5 +45,73 @@
         <p>&copy; 2024 Eduflex. All rights reserved.</p>
     </footer>
 
+    
+<script>
+    function toggleSubmitButton() {
+        document.getElementById('btnSubmit').disabled = !document.getElementById('chkAgree').checked;
+    }
+
+    document.getElementById('register').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Client-side validation
+        if (!validateUsername(data.uname)) {
+            alert('Username must be at least 3 characters long and contain only letters and numbers.');
+            return;
+        }
+
+        if (!validateEmail(data.email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        if (!validatePassword(data.password)) {
+            alert('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.');
+            return;
+        }
+
+        if (data.password !== data.cpassword) {
+            alert('Passwords do not match.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/regstudents', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = 'login.html';
+            } else {
+                alert('Registration failed: ' + result.message);
+            }
+        } catch (error) {
+            alert('An error occurred: ' + error.message);
+        }
+    });
+
+    function validateUsername(username) {
+        const re = /^[a-zA-Z0-9]{3,}$/;
+        return re.test(username);
+    }
+
+    function validateEmail(email) {
+        const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return re.test(email);
+    }
+
+    function validatePassword(password) {
+        const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        return re.test(password);
+    }
+</script>
+
 </body>
 </html>
