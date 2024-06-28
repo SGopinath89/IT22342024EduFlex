@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Edit Course</h2>
+        <form id="edit-course-form">
+            <label for="course-title">Course Title:</label>
+            <input type="text" id="course-title" name="course-title" required>
+
+            <label for="course-description">Course Description:</label>
+            <textarea id="course-description" name="course-description" rows="4" required></textarea>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Eduflex. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const courseId = params.get('id');
+
+            if (courseId) {
+                // Fetch course details
+                fetch(`/courses/${courseId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const course = data.course;
+                            document.getElementById('course-title').value = course.title;
+                            document.getElementById('course-description').value = course.description;
+                        } else {
+                            console.error('Error fetching course details:', data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error fetching course details:', error));
+
+                // Handle form submission
+                document.getElementById('edit-course-form').addEventListener('submit', (event) => {
+                    event.preventDefault();
+
+                    const title = document.getElementById('course-title').value;
+                    const description = document.getElementById('course-description').value;
+
+                    fetch(`/courses/${courseId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ title, description })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Course updated successfully!');
+                                window.location.href = 'teachersdashboard.html';
+                            } else {
+                                alert('Error updating course: ' + data.message);
+                            }
+                        })
+                        .catch(error => console.error('Error updating course:', error));
+                });
+            } else {
+                console.error('No course ID found in URL.');
+            }
+        });
+    </script>
+</body>
+</html>

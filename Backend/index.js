@@ -369,3 +369,25 @@ app.get('/courses/:id', async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
     }
 });
+
+// Get courses for a specific teacher by email
+app.get('/teacher/courses/:email', async (req, res) => {
+    const { email } = req.params;
+
+    try {
+        // Find teacher by email
+        const teacher = await Teacher.findOne({ email });
+
+        if (!teacher) {
+            return res.status(404).json({ success: false, message: 'Teacher not found.' });
+        }
+
+        // Find courses associated with this teacher's ID
+        const courses = await Course.find({ teacherId: teacher._id });
+
+        res.status(200).json({ success: true, courses });
+    } catch (error) {
+        console.error('Error fetching courses for teacher:', error);
+        res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
+    }
+});

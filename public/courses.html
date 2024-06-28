@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduflex - Home</title>
+    <link rel="stylesheet" href="styles.css">
+  
+ <style>
+                        /* Course cards */
+                .course-card {
+                    background-color: #f9f9f9;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    width: calc(25% - 20px); 
+                    margin-right: 20px;
+                    box-sizing: border-box;
+                    height: 200px; 
+                    display: inline-block; 
+                    vertical-align: top;
+                }
+
+                .course-card h3 {
+                    margin-top: 0;
+                    font-size: 1.5em;
+                    color: #333;
+                }
+
+                .course-card p {
+                    color: #666;
+                }
+
+                /* Buttons */
+                .course-card button {
+                    margin-top: 10px; /* Add margin at the top of buttons */
+                    padding: 10px 20px;
+                    background-color: #007bff;
+                    color: #fff;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                }
+
+                .course-card button:hover {
+                    background-color: #0056b3;
+                }
+
+ /* Container */
+                .container {
+                    max-width: 1200px; /* Adjust maximum width as needed */
+                    margin: 0 auto;
+                    padding: 20px;
+                    text-align: center; /*                         Ce            nter align the cards */
+                }                                       
+            
+            /* Clear floats after cards */
+            .container::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 992px) {
+                .course-card {
+                    width: calc(50% - 20px); /* Two cards per row on medium screens */
+                }
+            }
+
+            @media (max-width: 768px) {
+                .course-card {
+                    width: 100%; /* One card per row on small screens */
+                    margin-right: 0; /* Remove right margin */
+                    height: auto;
+                }
+            }
+
+            @media (min-width: 1201px) {
+    .container {
+        text-align: left; /* Align left for large screens */
+    }
+
+    .course-card:nth-child(4n+1) {
+        clear: left; /* Clear float after every fourth card */
+    }
+}
+
+    </style>    
+
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a class="get-started" href="login.html">Get Started</a></li> 
+            </ul>
+
+            <div class="logo-container">
+                <img class = "logo" src = "logo.png">
+            </div>
+        </nav>
+
+</header>
+
+<div class="container" id="courses-container">
+    <!-- Course cards will be dynamically added here -->
+</div>
+
+<footer>
+    <p>&copy; 2024 Eduflex. All rights reserved.</p>
+</footer>
+
+<script src="courses.js"></script>
+
+</body>
+</html>
