@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const courseSchema = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
+    imageUrl: { type: String }, 
     teacherId: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher', required: true }, // Reference to Teacher
     lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }]
 });

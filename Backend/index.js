@@ -3,14 +3,17 @@ const mongoose = require('mongoose');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const Student = require('./models/regstudent.model');
-const student = require('./models/regstudent.model');
+const Teacher = require('./models/regteacher.model');
 const Course = require('./models/course.model');
 const Lesson = require('./models/lesson.model');
 
 /*const regstudentRoute = require('./routes/regstudentRoute');*/
 
 const app = express();
+
+const upload = multer({ dest: 'uploads/' }); 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -119,7 +122,6 @@ app.post('/regstudents', async (req, res) => {
 
 /* ********LOGIN PAGE ******** */
 
-
 app.post('/login', async (req, res) => {
     const { uname, password } = req.body;
 
@@ -132,11 +134,11 @@ app.post('/login', async (req, res) => {
         }
         // Check in students collection
         let user = await Student.findOne({ uname });
-        let userType = 'student'; // to differentiate between student and student
+        let userType = 'student'; // to differentiate between student and teacher
         if (!user) {
-            // If user is not found in students collection, check in students collection
-            user = await student.findOne({ uname });
-            userType = 'student';
+            // If user is not found in students collection, check in teachers collection
+            user = await Teacher.findOne({ uname });
+            userType = 'teacher';
         }
 
         if (!user) {
@@ -145,10 +147,14 @@ app.post('/login', async (req, res) => {
 
         console.log('User found:', user);
 
+       /*  if (!user.password) {
+            return res.status(500).json({ success: false, message: 'Password hash is missing.' });
+        }
+ */
         const isMatch = await bcrypt.compare(password, user.password);
         console.log('Password entered:', password);
-        console.log('Password in database:', user.password);
-        console.log('Password match status:', isMatch); // Log the result of the password comparison
+console.log('Password in database:', user.password);
+console.log('Password match status:', isMatch); // Log the result of the password comparison
         
         if (isMatch) {
             // Redirect based on user type
@@ -157,7 +163,7 @@ app.post('/login', async (req, res) => {
                 uname: user.uname,
                 name: user.name,
                 email: user.email,
-                qualification: userType === 'student' ? user.qualification : undefined
+                qualification: userType === 'teacher' ? user.qualification : undefined
             };
             console.log(userDetails);
             
@@ -166,7 +172,7 @@ app.post('/login', async (req, res) => {
                 console.log('Redirect URL:', '/studentdashboard.html');
                 return res.status(200).json({ success: true, user: userDetails, redirectPage: '/studentdashboard.html' });
             } else {
-                return res.status(200).json({ success: true, user: userDetails, redirectPage: '/studentdashboard.html' });
+                return res.status(200).json({ success: true, user: userDetails, redirectPage: '/teacherdashboard.html' });
             }
         } else {
             console.warn('Invalid password attempt for user:', uname);
@@ -178,6 +184,178 @@ app.post('/login', async (req, res) => {
         }
         
 });
+/******create live session******** */
+
+/* *********teaherdashboard************** */
+
+/* **********course********** */
+
+app.post('/addcourse',  async (req, res) => {
+    const { title, description, email } = req.body;
+
+    if (!title || !description || !email) {
+        return res.status(400).json({
+            success: false,
+            message: 'Missing required fields: title, description, email'
+        });
+    }
+
+    try {
+        // Log before finding teacher
+          console.log('Finding teacher with email:', email);
+
+
+        // Find teacher by email
+        const teacher = await Teacher.findOne({ email });
+
+        if (!teacher) {
+            console.log('Teacher not found for email:', email);
+            return res.status(404).json({
+                success: false,
+                message: 'Teacher not found'
+            });
+        }
+
+          // Log before creating course
+          console.log('Creating course for teacher:', teacher._id);
+
+        // Use teacher's ID
+        const course = new Course({
+            title,
+            description,
+            teacherId: teacher._id
+        });
+
+        await course.save();
+
+        console.log('Course saved:', course);
+
+        res.status(200).json({ success: true, course });
+    } catch (error) {
+        console.error('Error adding course:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+/* app.get('/courses', async (req, res) => {
+    const teacherEmail = req.query.email; // Get teacher's email from query params
+    try {
+        const courses = await Course.find({ teacherEmail }); // Filter courses by teacher's email
+        res.json({ success: true, courses });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+ */
+
+
+
+app.get('/courses', async (req, res) => {
+    try {
+        const courses = await Course.find({});
+        res.status(200).json({ success: true, courses });
+    } catch (error) {
+        console.error('Error fetching courses:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Get course by ID
+app.get('/courses/:id', async (req, res) => {
+    const { id } = req.params;
+
+    // Validate the id
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: 'Invalid course ID format.' });
+    }
+
+    try {
+        console.log('Fetching course with ID:', id);
+
+        const course = await Course.findById(id);
+        console.log('Retrieved course:', course);
+
+        if (!course) {
+            console.log('Course not found.');
+            return res.status(404).json({ success: false, message: 'Course not found.' });
+        }
+
+        console.log('Sending course data:', course);
+        res.status(200).json({ success: true, course });
+    } catch (error) {
+        console.error('Error fetching course:', error);
+        res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
+    }
+});
+
+
+
+app.get('/teachers/:id', async (req, res) => {
+    try {
+        const teacher = await Teacher.findById(req.params.id);
+        if (!teacher) {
+            return res.status(404).json({ success: false, message: 'Teacher not found.' });
+        }
+        res.json({ success: true, teacher });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/check-login', (req, res) => {
+    if (req.session.user) {
+        res.json({ loggedIn: true });
+    } else {
+        res.json({ loggedIn: false });
+    }
+});
+
+
+/****** LESSONS ******/
+
+// Add lesson to course
+app.post('/courses/:id/lessons', async (req, res) => {
+    const { id } = req.params;
+    const { title, notes, video, quiz } = req.body;
+
+    // Validate the id
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: 'Invalid course ID format.' });
+    }
+
+    
+
+    try {
+        // Find the course by ID
+        const course = await Course.findById(id);
+
+        if (!course) {
+            return res.status(404).json({ success: false, message: 'Course not found.' });
+        }
+
+         // Create a new lesson
+         const newLesson = new Lesson({ title, notes, video, quiz, courseId: id });
+
+         // Save the lesson
+         await newLesson.save();
+ 
+         // Update the course's lessons array
+         course.lessons.push(newLesson._id);
+         await course.save();
+
+        // Assuming course has a lessons array
+        //course.lessons.push({ title, notes, video, quiz });
+
+        // Save the updated course
+       // await course.save();
+
+        res.status(201).json({ success: true, message: 'Lesson added successfully.', course });
+    } catch (error) {
+        console.error('Error adding lesson:', error);
+        res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
+    }
+});
+
 
 /* *******VALIDATION FUNCTIONS******* */
 
@@ -403,5 +581,28 @@ app.get('/students/:id', async (req, res) => {
         res.json({ success: true, student });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+
+// GET courses for a specific teacher
+app.get('/teacher/courses/:email', async (req, res) => {
+    const { email } = req.params;
+
+    try {
+        // Find teacher by email
+        const teacher = await Teacher.findOne({ email });
+
+        if (!teacher) {
+            return res.status(404).json({ success: false, message: 'Teacher not found.' });
+        }
+
+        // Find courses associated with this teacher's ID
+        const courses = await Course.find({ teacherId: teacher._id });
+
+        res.status(200).json({ success: true, courses });
+    } catch (error) {
+        console.error('Error fetching courses for teacher:', error);
+        res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
     }
 });
