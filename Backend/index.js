@@ -190,7 +190,7 @@ console.log('Password match status:', isMatch); // Log the result of the passwor
 
 /* **********course********** */
 
-app.post('/addcourse',  async (req, res) => {
+app.post('/addcourse', upload.single('course-image'),  async (req, res) => {
     const { title, description, email } = req.body;
 
     if (!title || !description || !email) {
@@ -445,7 +445,7 @@ app.get('/courses/:id', async (req, res) => {
     }
 
     try {
-        console.log('Fetching course with ID:', id);
+        console.log('Fetching course with ID:', id).populate('lessons');
 
         const course = await Course.findById(id);
         console.log('Retrieved course:', course);

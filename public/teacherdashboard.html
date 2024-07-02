@@ -16,8 +16,8 @@
                     padding: 20px;
                     margin-bottom: 20px;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    width: calc(25% - 20px); 
-                    margin-right: 20px; 
+                    width: calc(35% - 20px); 
+                    margin-right: 5px; 
                     float: left; 
                     box-sizing: border-box; 
                 }
@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const courseCard = document.createElement('div');
                                 courseCard.className = 'course-card';
                                 courseCard.innerHTML = `
+                                    <img src="/uploads/${course.image}" alt="${course.title}">
                                     <h3>${course.title}</h3>
                                     <p>${course.description}</p>
                                 `;

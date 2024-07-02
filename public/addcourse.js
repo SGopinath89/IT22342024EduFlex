@@ -4,8 +4,9 @@ document.getElementById('add-course-form').addEventListener('submit', async func
     const title = document.querySelector('input[name="course-title"]').value;
     const description = document.querySelector('textarea[name="course-description"]').value;
     const email = document.querySelector('input[name="email"]').value;
+    const image = document.querySelector('input[name="course-image"]').files[0]; // Get the selected image file
 
-    if (!title || !description || !email) {
+    if (!title || !description || !email || !image) {
         alert('Please fill in all required fields.');
         return;
     }
@@ -16,7 +17,7 @@ document.getElementById('add-course-form').addEventListener('submit', async func
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ title, description, email })
+            body: JSON.stringify({ title, description, email, image })
         });
 
         const result = await response.json();
@@ -30,7 +31,7 @@ document.getElementById('add-course-form').addEventListener('submit', async func
     }
 });
 
-
+//dropdown
 document.addEventListener('DOMContentLoaded', function () {
     fetch('/courses')
        //  .then(response => response.json()) 
@@ -105,3 +106,4 @@ document.getElementById('add-lesson-form').addEventListener('submit', async func
     }
 
 });
+
