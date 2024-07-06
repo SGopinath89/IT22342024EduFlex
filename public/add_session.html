@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Session</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a class="get-started" href="login.html">Get Started</a></li>
+            </ul>
+
+            <div class="logo-container">
+                <img class = "logo" src = "logo.png">
+            </div>
+
+            
+			
+
+        </nav>
+
+
+</header>
+
+    <div class="container">
+        <h1>Add New Session</h1>
+        <form id="add-session-form">
+            <label for="courseId">Course ID:</label>
+            <input type="text" id="courseId" name="courseId" required>
+
+            <label for="title">Session Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Session Description:</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <button type="submit">Add Session</button>
+        </form>
+        <p id="session-link"></p>
+    </div>
+    <script src="scripts.js"></script>
+
+    <footer>
+        <p>&copy; 2024 Eduflex. All rights reserved.</p>
+    </footer>
+</body>
+</html>
