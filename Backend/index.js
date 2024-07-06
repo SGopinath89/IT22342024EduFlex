@@ -8,10 +8,14 @@ const Student = require('./models/regstudent.model');
 const Teacher = require('./models/regteacher.model');
 const Course = require('./models/course.model');
 const Lesson = require('./models/lesson.model');
+//const Contact = require('./models/contact.modekl');
+//const contactRoute = require('./routes/contact.routes');
 
 /*const regstudentRoute = require('./routes/regstudentRoute');*/
 
 const app = express();
+
+//app.use('/contacts',contactRoute);
 
 const upload = multer({ dest: 'uploads/' }); 
 
