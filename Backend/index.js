@@ -8,6 +8,8 @@ const Student = require('./models/regstudent.model');
 const Teacher = require('./models/regteacher.model');
 const Course = require('./models/course.model');
 const Lesson = require('./models/lesson.model');
+const Student = require('./models/student.model');
+const Course = require('./models/course.model');
 //const Contact = require('./models/contact.modekl');
 //const contactRoute = require('./routes/contact.routes');
 
@@ -610,3 +612,39 @@ app.get('/teacher/courses/:email', async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
     }
 });
+
+//session
+app.get('/api/students/:studentId', async (req, res) => {
+    const { studentId } = req.params;
+
+    try {
+        const student = await Student.findOne({ studentId }).populate('enrolledCourses');
+        if (!student) {
+            return res.status(404).json({ error: 'Student not found' });
+        }
+
+        res.json(student);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// endpoint to update course progress
+app.put('/api/courses/:courseId/update-progress', async (req, res) => {
+    const { courseId } = req.params;
+    const { progress } = req.body;
+
+    try {
+        const course = await Course.findByIdAndUpdate(courseId, { progress }, { new: true });
+        if (!course) {
+            return res.status(404).json({ error: 'Course not found' });
+        }
+
+        res.json(course);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
