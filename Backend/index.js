@@ -648,3 +648,21 @@ app.put('/api/courses/:courseId/update-progress', async (req, res) => {
     }
 });
 
+//quiz
+app.get('/course/:id', async (req, res) => {
+    try {
+        const course = await Course.findById(req.params.id);
+        if (!course) {
+            return res.status(404).send('Course not found');
+        }
+        res.json(course);
+    } catch (error) {
+        res.status(500).send('Server error');
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});
+
+
